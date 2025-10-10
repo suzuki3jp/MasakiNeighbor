@@ -4,11 +4,16 @@ Copyright © 2025 suzuki3jp
 package cmd
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/spf13/cobra"
+	"github.com/suzuki3jp/mn/internal/calc"
 	"github.com/suzuki3jp/mn/internal/fs"
+	"github.com/suzuki3jp/mn/internal/output"
 )
+
+var A float64
 
 var rootCmd = &cobra.Command{
 	Use:   "mn",
@@ -21,7 +26,14 @@ var rootCmd = &cobra.Command{
 			cmd.PrintErrln(err)
 			os.Exit(1)
 		}
-		cmd.Printf("読み込んだ点: %+v\n", points)
+
+		result := calc.Mn(points, A)
+		err = output.WriteJSONToFile(result, "./output.json")
+		if err != nil {
+			cmd.PrintErrln(err)
+			os.Exit(1)
+		}
+		fmt.Printf("%+v\n", result)
 	},
 }
 
@@ -33,4 +45,5 @@ func Execute() {
 }
 
 func init() {
+	rootCmd.Flags().Float64VarP(&A, "a", "a", 1.0, "Parameter 'a' to pass to calc.Mn")
 }

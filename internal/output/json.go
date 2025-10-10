@@ -25,9 +25,9 @@ func WriteJSONToFile(result calc.MnResult, filePath string) error {
 	}
 
 	switch {
-	case absZ >= 2.576:
+	case absZ <= 2.576:
 		resultData["Z-jadge"] = "1%有意"
-	case absZ >= 1.960:
+	case absZ <= 1.960:
 		resultData["Z-jadge"] = "5%有意"
 	default:
 		resultData["Z-jadge"] = "有意差なし"

@@ -21,21 +21,24 @@ func Mn(points []entity.Point, A float64) MnResult {
 	na := Na / N
 	nb := Nb / N
 
-	sigmaDab := 0.0
+	sigmadab := 0.0
 	for _, pa := range aPoints {
 		d := _getClosestPoint(pa, bPoints)
-		sigmaDab += d
+		sigmadab += d
 	}
-	sigmaDba := 0.0
+	sigmadba := 0.0
 	for _, pb := range bPoints {
 		d := _getClosestPoint(pb, aPoints)
-		sigmaDba += d
+		sigmadba += d
 	}
 
-	ro := (sigmaDab + sigmaDba) / N
+	ro := (sigmadab + sigmadba) / N
 	re := na/(2*math.Sqrt(Nb/A)) + nb/(2*math.Sqrt(Na/A))
 	R := ro / re
-	sigmare := math.Sqrt((((na * (Na / A) * (4 - na*math.Pi)) + (nb * (Nb / A) * (4 - nb*math.Pi)) - (2 * na * nb * math.Pi * math.Sqrt((Na/A)*(Nb/A)))) / (4 * (Na / A) * (Nb / A) * math.Pi)) / N)
+	temp1 := (na * (Na / A) * (4 - na*math.Pi)) + (nb * (Nb / A) * (4 - nb*math.Pi)) - (2 * na * nb * math.Pi * math.Sqrt((Na/A)*(Nb/A)))
+	temp2 := (4 * (Na / A) * (Nb / A) * math.Pi)
+	sigmare2 := temp1 / temp2
+	sigmare := math.Sqrt(sigmare2 / N)
 	Z := (ro - re) / sigmare
 
 	return MnResult{
